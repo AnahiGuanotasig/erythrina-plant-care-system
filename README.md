@@ -1,3 +1,3 @@
-# Sistema-Invernaderp
-Sistema de gestión para invernaderos del hogar
+# erythrina-plant-care-system
+Sistema de gestión para plantas dentro del hogar
 
