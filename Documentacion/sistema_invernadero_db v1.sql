@@ -5,12 +5,12 @@
 
  CREATE TABLE usuarios (
 	id SERIAL PRIMARY KEY,
-	numero_cedula VARCHAR(20) NOT NULL UNIQUE,
+	correo_electronico VARCHAR(100) NOT NULL UNIQUE,
 	nombre_usuario VARCHAR(60) NOT NULL,
 	password_hash VARCHAR NOT NULL,
-	correo_electronico VARCHAR(100) NOT NULL UNIQUE,
 	id_rol INTEGER NOT NULL REFERENCES roles(id) 
 );
+
  
 CREATE TABLE plantas_tipos (
 	id SERIAL PRIMARY KEY,
