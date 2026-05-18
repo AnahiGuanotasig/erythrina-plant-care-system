@@ -27,6 +27,7 @@ CREATE TABLE estados (
 CREATE TABLE plantas (
     id SERIAL PRIMARY KEY,
     codigo VARCHAR(20) NOT NULL UNIQUE,
+	nombre VARCHAR(60) NOT NULL,
     id_tipo INT NOT NULL REFERENCES plantas_tipos(id),
     id_tamanio INT NOT NULL REFERENCES plantas_tamanios(id),
     id_estado INT NOT NULL REFERENCES estados(id),
