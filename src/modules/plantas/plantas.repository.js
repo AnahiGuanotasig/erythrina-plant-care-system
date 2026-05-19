@@ -55,7 +55,6 @@ export const getPlanta = async (id) => {
 };
 
 export const updatePlanta = async (id, camposActualizados) => {
-
     const query = `
         UPDATE plantas 
         SET nombre = COALESCE($1, nombre), 
@@ -63,18 +62,18 @@ export const updatePlanta = async (id, camposActualizados) => {
             id_tamanio = COALESCE($3, id_tamanio), 
             intervalo_riego_dias = COALESCE($4, intervalo_riego_dias)
         WHERE id = $5 
-        RETURNING *`;
+        RETURNING *;`;
     
     const values = [
-        camposActualizados.nombre || null, 
-        camposActualizados.id_estado || null, 
-        camposActualizados.id_tamanio || null, 
-        camposActualizados.intervalo_riego_dias || null, 
+        camposActualizados.nombre ?? null, 
+        camposActualizados.id_estado ?? null, 
+        camposActualizados.id_tamanio ?? null, 
+        camposActualizados.intervalo_riego_dias ?? null, 
         id
     ];
     
     const resultado = await pool.query(query, values);
-    return resultado.rows[0];
+    return resultado.rows[0]; 
 };
 
 export const deletePlanta = async (id) => {

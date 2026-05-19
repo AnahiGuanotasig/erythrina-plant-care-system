@@ -48,6 +48,14 @@ export const getPlanta = async (req, res) => {
 export const updatePlanta = async(req,res) =>{
     try {
         const nuevaPlanta = await PlantasService.updatePlanta(req.params.id, req.body);
+        
+        if (!nuevaPlanta || (Array.isArray(nuevaPlanta) && nuevaPlanta.length === 0) || !nuevaPlanta.id) {
+            return res.status(404).json({
+                success: false,
+                message: "La planta no existe"
+            });
+        }
+        
         return res.status(200).json({
             success: true,
             data: nuevaPlanta
@@ -63,6 +71,14 @@ export const updatePlanta = async(req,res) =>{
 export const deletePlanta = async(req,res) =>{
     try {
         const plantaBorrada = await PlantasService.deletePlanta(req.params.id);
+        
+        if (!plantaBorrada || (Array.isArray(plantaBorrada) && plantaBorrada.length === 0) || !plantaBorrada.id) {
+            return res.status(404).json({
+                success: false,
+                message: "La planta no existe"
+            });
+        }
+
         return res.status(200).json({
             success: true,
             data: plantaBorrada
