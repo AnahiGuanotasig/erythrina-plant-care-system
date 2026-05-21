@@ -14,9 +14,15 @@ export const createHistorialPlantas = async (data) =>{
         const validateData = historialPlantasSchema.parse(data);
         return await HistorialPlantasRepository.createHistorialPlantas(validateData);
     } catch (error) {
-        if (error instanceof z.ZodError) {
-            throw new Error(error.errors[0].message);
+        if (error instanceof z.ZodError || error.issues) {
+            const listaErrores = error.issues || error.errors || [];
+            
+            if (listaErrores.length > 0) {
+                const mensajes = listaErrores.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+                throw new Error(`Error de validación: ${mensajes}`);
+            }
         }
+        
         error.message = "Error al crear el historial de la planta: " + error.message;
         throw error;
     }

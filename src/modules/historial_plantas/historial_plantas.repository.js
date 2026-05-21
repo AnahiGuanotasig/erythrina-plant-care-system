@@ -1,5 +1,5 @@
 import { id } from "zod/locales";
-import { pool } from "../../config/database";
+import { pool } from "../../config/database.js";
 
 export const createHistorialPlantas = async({
     id_planta,
@@ -37,7 +37,7 @@ export const getHistorialPlanta = async (id) =>{
             h.observaciones
         FROM historial_plantas h
         JOIN estados e ON h.id_estado = e.id
-        JOIN tamanios t ON h.id_tamanio = t.id
+        JOIN plantas_tamanios t ON h.id_tamanio = t.id
         WHERE h.id_planta = $1
         ORDER BY h.fecha_registro DESC
     `;
