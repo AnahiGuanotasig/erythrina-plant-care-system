@@ -1,15 +1,17 @@
 import express from 'express';
 
 import plantasRoutes from './modules/plantas/plantas.routes.js';
+import historialPlantasRoutes from './modules/historial_plantas/historial_plantas.routes.js';
 
 const app = express();
 
 app.use(express.json());
 
 app.use('/api/plantas',plantasRoutes);
+app.use('/api/historial_plantas', historialPlantasRoutes);
 
 app.get('/',(req, res)=>{
-    res.json({message: "Bienvenido a la API dedicada a las plantas"})
+    res.json({message: "Bienvenido a la API dedicada al sistema de gestion de las plantas"})
 });
 
 export default app;
