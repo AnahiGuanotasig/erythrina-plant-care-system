@@ -1,17 +1,10 @@
 import {z} from "zod";
 import * as HistorialPlantasRepository from "./historial_plantas.repository.js";
-
-const historialPlantasSchema = z.object({
-    id_planta: z.number().int().positive(),
-    id_estado: z.number().int().positive(),
-    id_tamanio: z.number().int().positive(),
-    intervalo_riego_dias: z .number().min(1).optional(),
-    observaciones: z.string().optional()
-});
+import * as HistorialPlantasSchema from "./historial_plantas.schema.js";
 
 export const createHistorialPlantas = async (data) =>{
     try{
-        const validateData = historialPlantasSchema.parse(data);
+        const validateData = HistorialPlantasSchema.historialPlantasSchema.parse(data);
         return await HistorialPlantasRepository.createHistorialPlantas(validateData);
     } catch (error) {
         if (error instanceof z.ZodError || error.issues) {
