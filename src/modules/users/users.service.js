@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import * as UsersSchema from './users.schema.js'
 import * as UsersRepository from './users.repository.js'
 
+
 export const getUserByEmail = async(correo_electronico)=>{
     try {
         const user = await UsersRepository.getUserByEmail(correo_electronico);
@@ -42,3 +43,30 @@ export const createUser = async(data)=>{
     };
 };
 
+export const loginUser = async(credenciales) =>{
+    try {
+        const validateData = UsersSchema.loginSchema.parse(credenciales);
+        const user = await UsersRepository.getUserCrendencialByEmail(validateData.correo_electronico);
+        if(!user){
+            throw new Error("Correo electronico o contrasenia incorrectos");
+        };
+        const isPasswordValido = await bcrypt.compare(validateData.password,user.password_hash);
+        if(!isPasswordValido){
+            throw new Error("Correo electronico o contrasenia incorrectos");
+        };
+        return{
+            id: user.id,
+            correo_electronico: user.correo_electronico,
+            message: 'Login exitoso'
+        };
+    } catch (error) {
+        if (error instanceof z.ZodError || error.issues) {
+            const listaErrores = error.issues || error.errors || [];
+            if (listaErrores.length > 0) {
+                const mensajes = listaErrores.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+                throw new Error(`Error de validación: ${mensajes}`);
+            }
+        }
+        throw new Error(error.message);
+    };
+};

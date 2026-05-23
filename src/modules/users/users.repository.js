@@ -33,3 +33,17 @@ export const createUsuario = async ({
     const resultado = await pool.query(query, values);
     return resultado.rows[0];
 }
+
+export const getUserCrendencialByEmail = async(correo_electronico) =>{
+    try {
+        const query = `
+        SELECT id,correo_electronico,nombre_usuario,password_hash
+        FROM usuarios
+        WHERE correo_electronico = $1
+        `
+        const resultado = await pool.query(query,[correo_electronico]);
+        return resultado.rows[0];
+    } catch (error) {
+        throw new Error("Error al obtener las credenciales del usuario: " + error.message);
+    }
+}

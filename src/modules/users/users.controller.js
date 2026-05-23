@@ -33,3 +33,18 @@ export const createUser = async (req,res) => {
         });
     };
 };
+
+export const loginUser = async(req,res) =>{
+    try {
+        const user = await UsersService.loginUser(req.body);
+        return res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    };
+};
