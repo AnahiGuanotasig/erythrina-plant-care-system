@@ -1,5 +1,5 @@
 # erythrina-plant-care-system
-# Sistema Web para cuidado de plantas en el área doméstica 🚀
+# Sistema Web para cuidado de plantas en el área doméstica 
 
 Este es un proyecto **Fullstack** desarrollado para el monitoreo y gestión de plantas dentro del hogar. Este proyecto es una aplicación web diseñada para el monitoreo y control centralizado de las plantas. El sistema está estructurado para que el propietario se registre y autentique, tomando el control absoluto y exclusivo de toda la gestión de plantas y el historial de eventos.
 
