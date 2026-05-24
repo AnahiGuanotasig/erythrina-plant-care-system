@@ -1,4 +1,5 @@
 import * as UsersService from './users.service.js'
+import jsonwebtoken from 'jsonwebtoken';
 
 export const getUserByEmail = async (req,res) => {
     try{
@@ -37,6 +38,11 @@ export const createUser = async (req,res) => {
 export const loginUser = async(req,res) =>{
     try {
         const user = await UsersService.loginUser(req.body);
+
+        const token = jsonwebtoken.sign(
+            {id: user.id, correo_electronico: user.correo_electronico},
+            process.env.JWT_SECRET,{expiresIn: '24h'}
+        )
         return res.status(200).json({
             success: true,
             data: user
