@@ -23,5 +23,8 @@ Este es un proyecto **Fullstack** desarrollado para el monitoreo y gestión de p
 ### Frontend
 *   **React** - Librería para la interfaz de usuario.
 *   **SCSS** - Estilos estructurados y diseño responsivo.
+---
 
+## Privacidad y Licencia
 
+Este proyecto es de **uso estrictamente personal y privado**. Todos los derechos están reservados por el autor. Queda prohibida la reproducción, distribución o uso comercial de este código sin autorización previa.
