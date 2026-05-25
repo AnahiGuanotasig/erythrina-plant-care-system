@@ -1,71 +1,79 @@
-// frontend/src/components/Login.jsx
-import { useState } from "react";
-import { login } from "../../services/auth.service";
-import "./Login.scss";
+// frontend/src/components/Login/Login.jsx
+import { useState } from 'react';
+import { login } from '../../services/auth.service';
+import './Login.scss';
 
 const Login = ({ onLoginSuccess }) => {
-    const [correo_electronico, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [correo_electronico, setCorreoElectronico] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
+        setError('');
         setLoading(true);
 
         try {
             const response = await login(correo_electronico, password);
-
             if (response.success) {
                 onLoginSuccess(response.data);
+            } else {
+                setError(response.message || 'Credenciales incorrectas');
             }
-        } catch (err) {
-            const errorMsg =
-                err.response?.data?.message || "Error al conectar con el servidor";
-            setError(errorMsg);
+        } catch {
+            setError('Error al conectar con el servidor');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
-                <h2>Erythrina</h2>
-                <p className="subtitle">Sistema de Gestión de Plantas</p>
+        <div className="login-split-container">
+            {/* MITAD IZQUIERDA: CONTENEDOR DEL FORMULARIO */}
+            <div className="login-form-side">
+                <div className="login-card">
+                    <h2>¡Bienvenido!</h2>
+                    <p className="subtitle">Ingresa tus credenciales para acceder</p>
 
-                {error && <div className="error-message">{error}</div>}
+                    {error && <div className="error-message">{error}</div>}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Correo Electrónico</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={correo_electronico}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="ejemplo@correo.com"
-                        />
-                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>Correo Electrónico</label>
+                            <input
+                                type="email"
+                                value={correo_electronico}
+                                onChange={(e) => setCorreoElectronico(e.target.value)}
+                                required
+                                placeholder="correo@ejemplo.com"
+                            />
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Contraseña</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="••••••••"
-                        />
-                    </div>
+                        <div className="form-group">
+                            <label>Contraseña</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                placeholder="••••••••"
+                            />
+                        </div>
 
-                    <button type="submit" className="btn-login" disabled={loading}>
-                        {loading ? "Iniciando sesión..." : "Ingresar"}
-                    </button>
-                </form>
+                        <button type="submit" className="btn-login" disabled={loading}>
+                            {loading ? 'Cargando...' : 'Iniciar Sesión'}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {/* MITAD DERECHA: CONTENEDOR DE LA IMAGEN */}
+            <div className="login-image-side">
+                <div className="image-overlay-text">
+                    <h1>Erythrina</h1>
+                    <p>Sistema de Gestión y Cuidado de Plantas</p>
+                </div>
             </div>
         </div>
     );

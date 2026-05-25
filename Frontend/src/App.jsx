@@ -2,15 +2,11 @@
 import { useState, useEffect } from 'react';
 import Login from './components/Login/Login';
 import { logout } from './services/auth.service';
-// Cuando tengas la lista de plantas la importaremos aquí, ej:
-// import PlantList from './components/PlantList/PlantList';
 
 function App() {
-  // 1. Estados para controlar la sesión
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // 2. Comprobar si ya había un token guardado al abrir la página
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -18,27 +14,23 @@ function App() {
     }
   }, []);
 
-  // 3. Callback para cuando el usuario ingresa sus datos correctamente
   const handleLoginSuccess = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
   };
 
-  // 4. Callback para limpiar el token y cerrar la sesión
   const handleLogout = () => {
     logout();
     setUser(null);
     setIsAuthenticated(false);
   };
 
-  // 5. Renderizado Condicional: Si no está autenticado, muestra la pantalla verde de Login
   if (!isAuthenticated) {
     return <Login onLoginSuccess={handleLoginSuccess} />;
   }
 
-  // 6. Si está autenticado, muestra la aplicación principal de Erythrina
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', maxWidth: '1800px', margin: '0 auto' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #e0e0e0', paddingBottom: '1rem', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ color: '#2e7d32', margin: 0 }}>Erythrina</h1>

@@ -1,88 +1,273 @@
-.login-container {
+@use "sass:color";
+
+// --- VARIABLES GLOBALES DE DISEÑO ---
+$color-principal: #2e7d32; 
+$color-secundario: #4caf50; 
+$color-fondo: #f1f8e9; 
+$color-texto: #1b5e20; 
+$color-blanco: #ffffff;
+$color-rojo: #d32f2f;
+$sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+// --- RESET BÁSICO ---
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: $color-fondo;
+}
+
+// ==========================================
+// 1. ESTILOS DE LA PANTALLA DE LOGIN (PANTALLA DIVIDIDA)
+// ==========================================
+.login-split-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    background-color: $color-blanco;
 
-    .login-card {
-        background: #ffffff;
-        padding: 2.5rem;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        width: 100%;
-        max-width: 400px;
-        text-align: center;
+    // ---MITAD IZQUIERDA: Imagen decorativa---
+    .login-image-side {
+        flex: 1; // Toma el 50% de la pantalla
+        background-color: $color-principal;
+        // Aquí puedes cambiar esta URL por la imagen local que quieras de tus plantas
+        background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1500&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
 
-        h2 {
-            color: #2e7d32;
-            margin-bottom: 0.5rem;
-            font-size: 1.8rem;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(27, 94, 32, 0.4); // Capa traslúcida verde oscura
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
+        .image-overlay-text {
+            position: relative;
+            z-index: 2;
+            color: $color-blanco;
+            text-align: center;
+            padding: 20px;
+            text-shadow: 0 2px 4px rgba(26, 11, 11, 0.4);
+
+            h1 {
+                font-size: 6rem;
+                margin: 0;
+                font-weight: 800;
+            }
+            p {
+                font-size: 2rem;
+                margin-top: 10px;
+                opacity: 0.9;
+            }
         }
+    }
 
-        .form-group {
-            text-align: left;
-            margin-bottom: 1.5rem;
+    // ---MITAD DERECHA: El Formulario---
+    .login-form-side {
+        flex: 1; // Toma el otro 50% de la pantalla
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        background-color: $color-fondo; // Mantiene el fondo suave de tu paleta
 
-            label {
-                display: block;
-                margin-bottom: 0.5rem;
-                color: #444;
-                font-weight: 600;
-                font-size: 0.9rem;
+        .login-card {
+            background-color: $color-blanco;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: $sombra-suave;
+            width: 100%;
+            max-width: 420px; // Evita que se deforme el formulario
+            box-sizing: border-box;
+
+            h2 {
+                color: $color-texto;
+                margin-bottom: 8px;
+                font-size: 28px;
+                text-align: center;
+                font-weight: 700;
             }
 
-            input {
-                width: 100%;
-                padding: 0.75rem;
-                border: 2px solid #e0e0e0;
-                border-radius: 8px;
-                font-size: 1rem;
-                transition: border-color 0.3s ease;
+            .subtitle {
+                color: #666;
+                font-size: 14px;
+                text-align: center;
+                margin-bottom: 30px;
+            }
 
-                &:focus {
-                    outline: none;
-                    border-color: #4caf50;
+            .error-message {
+                background-color: color.scale($color-rojo, $lightness: 80%);
+                color: $color-rojo;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid color.scale($color-rojo, $lightness: 60%);
+                font-weight: 500;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: $color-texto;
+                    margin-bottom: 8px;
+                }
+
+                input {
+                    padding: 12px 16px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    transition: all 0.3s ease;
+
+                    &:focus {
+                        outline: none;
+                        border-color: $color-secundario;
+                        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+                    }
+                }
+            }
+
+            .btn-login {
+                width: 100%;
+                padding: 14px;
+                background-color: $color-principal;
+                color: $color-blanco;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                margin-top: 10px;
+
+                &:hover:not(:disabled) {
+                    background-color: color.scale($color-principal, $lightness: -14.9122807018%); 
+                }
+
+                &:disabled {
+                    background-color: #a5d6a7;
+                    cursor: not-allowed;
                 }
             }
         }
+    }
+}
 
-        .error-message {
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
+@media (max-width: 900px) {
+    .login-split-container {
+        flex-direction: column;
+    }
+
+    .login-form-side,
+    .login-image-side {
+        flex: none;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .login-form-side {
+        padding: 30px 20px;
+    }
+
+    .login-image-side {
+        min-height: 40vh;
+    }
+}
+
+// ==========================================
+// 2. ESTILOS DEL PANEL DE CONTROL (DASHBOARD)
+// ==========================================
+.dashboard-wrapper {
+    padding: 2rem;
+    max-width: 1800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+
+        h1 {
+            color: $color-principal;
+            margin: 0;
+        }
+        p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    }
+
+    .dashboard-content {
+        background-color: $color-blanco;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: $sombra-suave;
+
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        
+        .success-message {
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
         }
 
-        .btn-login {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #2e7d32;
-            color: white;
-            border: none;
+        .next-step-box {
+            border: 2px dashed #a5d6a7;
+            background-color: #e8f5e9;
+            padding: 2rem;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            color: $color-texto;
+            font-weight: 500;
+        }
+    }
 
-            &:hover {
-                background-color: #1b5e20;
-            }
+    .btn-logout {
+        padding: 0.6rem 1.2rem;
+        background-color: $color-rojo;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
 
-            &:disabled {
-                background-color: #a5d6a7;
-                cursor: not-allowed;
-            }
+        &:hover {
+            background-color: color.scale($color-rojo, $lightness: -15%);
+        }
+    }
+}
+
+// --- Responsivo para Móviles ---
+@media (max-width: 768px) {
+    .login-split-container {
+        flex-direction: column;
+        .login-image-side {
+            display: none; // Esconde la imagen en celulares para que sea cómodo loguearse
+        }
+        .login-form-side {
+            padding: 20px;
         }
     }
 }
