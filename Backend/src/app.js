@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 
 import plantasRoutes from './modules/plantas/plantas.routes.js';
 import historialPlantasRoutes from './modules/historial_plantas/historial_plantas.routes.js';
@@ -7,6 +8,7 @@ import usersRoutes from './modules/users/users.routes.js'
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/plantas',plantasRoutes);
