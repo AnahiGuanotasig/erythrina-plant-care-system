@@ -11,10 +11,9 @@ export const login = async (correo_electronico, password) => {
         return response.data;
     } catch (error) {
         console.error('Login error:', error);
-        // Conservamos tu manejo de errores para que el componente no se rompa
         return {
             success: false,
-            message: error.response?.data?.message || 'Login failed'
+            message: error.response?.data?.message || 'Contraseña o correo electrónico incorrectos'
         };
     }
 };

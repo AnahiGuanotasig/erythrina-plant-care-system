@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { login } from '../../services/auth.service';
 import './Login.scss';
 
-const Login = ({ onLoginSuccess }) => {
+const Login = ({ onLoginSuccess, onShowRegister }) => {
     const [correo_electronico, setCorreoElectronico] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -64,6 +64,12 @@ const Login = ({ onLoginSuccess }) => {
                         <button type="submit" className="btn-login" disabled={loading}>
                             {loading ? 'Cargando...' : 'Iniciar Sesión'}
                         </button>
+                        <div className="form-footer">
+                            <span>¿No tienes cuenta? </span>
+                            <button type="button" className="link-button" onClick={onShowRegister}>
+                                Registrarse
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

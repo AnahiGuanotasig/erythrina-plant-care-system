@@ -1,8 +1,8 @@
 @use "sass:color";
 
 // --- VARIABLES GLOBALES DE DISEÑO ---
-$color-principal: #2e7d32; 
-$color-secundario: #4caf50; 
+$color-principal:#4caf50 ; 
+$color-secundario:#2e7d32 ; 
 $color-fondo: #f1f8e9; 
 $color-texto: #1b5e20; 
 $color-blanco: #ffffff;
@@ -159,6 +159,30 @@ body {
                     background-color: #a5d6a7;
                     cursor: not-allowed;
                 }
+            }
+
+            .form-footer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                margin-top: 16px;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .link-button {
+                background: none;
+                border: none;
+                color: $color-principal;
+                cursor: pointer;
+                font-weight: 700;
+                padding: 0;
+                text-decoration: underline;
+            }
+
+            .link-button:hover {
+                color: $color-secundario;
             }
         }
     }
