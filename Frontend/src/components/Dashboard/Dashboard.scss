@@ -24,6 +24,9 @@ body {
     width: 100%; 
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 
     .dashboard-header {
         display: flex;
@@ -49,6 +52,11 @@ body {
             }
         }
     }
+    main {
+        display: flex;       
+        flex-grow: 1;        
+        width: 100%;
+    }
 
     .logout-button {
         background-color: $color-rojo;
@@ -62,6 +70,175 @@ body {
 
         &:hover {
             background-color: color.scale($color-rojo, $lightness: -10%);
+        }
+    }
+    
+    .sidebar {
+        width: 260px;
+        background-color: $color-blanco;
+        border-right: 2px solid #e0e0e0;
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .sidebar-brand {
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+
+            h3 {
+                margin: 0;
+                color: $color-texto;
+                font-size: 1.1rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; 
+
+            .menu-item {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                color: #555555;
+                font-weight: 500;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                .icon {
+                    margin-right: 0.75rem;
+                    font-size: 1.1rem;
+                }
+
+                &:hover {
+                    background-color: $color-fondo;
+                    color: $color-secundario;
+                    padding-left: 1.25rem; 
+                }
+
+                &.active {
+                    background-color: $color-principal;
+                    color: $color-blanco;
+                    font-weight: bold;
+
+                    &:hover {
+                        background-color: $color-secundario; 
+                        padding-left: 1rem; 
+                    }
+                }
+            }
+        }
+    }
+
+    .dashboard-content {
+        flex-grow: 1;
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem; 
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 1.5rem; 
+        width: 100%;
+
+        .stat-card {
+            background-color: $color-blanco;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #e0e0e0;
+
+            .stat-icon {
+                font-size: 2rem;
+                background-color: $color-fondo;
+                padding: 0.75rem;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50px;
+                height: 50px;
+            }
+
+            .stat-info {
+                display: flex;
+                flex-direction: column;
+
+                h4 {
+                    margin: 0;
+                    color: #666666;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .stat-number {
+                    margin: 0;
+                    font-size: 1.8rem;
+                    font-weight: bold;
+                    color: $color-texto;
+                }
+            }
+
+
+            &.alert {
+                border-left: 4px solid $color-rojo;
+                
+                .stat-icon {
+                    background-color: #ffebee; 
+                }
+                .stat-info .stat-number {
+                    color: $color-rojo;
+                }
+            }
+        }
+    }
+
+    .plants-section {
+        background-color: $color-blanco;
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+        .section-header {
+            margin-bottom: 1.5rem;
+
+            h2 {
+                margin: 0 0 0.5rem 0;
+                color: $color-texto;
+            }
+
+            .section-subtitle {
+                margin: 0;
+                color: #666666;
+                font-size: 0.95rem;
+            }
+        }
+
+        .plants-table-container {
+            margin-top: 1.5rem;
+            padding: 2rem;
+            border: 2px dashed #a5d6a7;
+            background-color: $color-fondo;
+            border-radius: 8px;
+            text-align: center;
+            color: $color-secundario;
+            font-weight: 500;
         }
     }
 }

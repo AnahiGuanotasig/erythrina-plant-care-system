@@ -28,16 +28,66 @@ const Dashboard = ({ onLogout }) => {
             </header>
 
             <main>
-                <div style={{ backgroundColor: '#f9f9f9', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '2.5rem', textAlign: 'center' }}>
-                    <h2 style={{ color: '#333', marginTop: 0 }}>¡Conexión Exitosa! 🎉</h2>
-                    <p style={{ color: '#555', maxWidth: '600px', margin: '0 auto 1.5rem' }}>
-                        Tu sistema de autenticación está validando los tokens correctamente mediante JWT. El backend y el frontend ya se comunican sin interferencias.
-                    </p>
-
-                    <div style={{ border: '2px dashed #a5d6a7', backgroundColor: '#e8f5e9', padding: '2rem', borderRadius: '8px', color: '#2e7d32', fontWeight: '500' }}>
-                        El siguiente paso es crear el componente para listar tus plantas desde la base de datos PostgreSQL.
+                <div className="sidebar">
+                    <div className="sidebar-brand">
+                        <h3>Menú Principal</h3>
                     </div>
+
+                    <ul className="sidebar-menu">
+                        <li className="menu-item">
+                            <span className="icon">➕</span> Agregar Planta
+                        </li>
+                        <li className="menu-item">
+                            <span className="icon">📋</span> Ver Historial
+                        </li>
+                        <li className="menu-item">
+                            <span className="icon">⚙️</span> Configuración
+                        </li>
+                    </ul>
                 </div>
+                <div className="dashboard-content">
+
+                    {/* 1. SECCIÓN DE TARJETAS ESTADÍSTICAS */}
+                    <section className="stats-grid">
+                        <div className="stat-card">
+                            <span className="stat-icon">🌱</span>
+                            <div className="stat-info">
+                                <h4>Total Plantas</h4>
+                                <p className="stat-number">12</p>
+                            </div>
+                        </div>
+                        <div className="stat-card alert">
+                            <span className="stat-icon">💧</span>
+                            <div className="stat-info">
+                                <h4>Por Regar</h4>
+                                <p className="stat-number">3</p>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-icon">❤️</span>
+                            <div className="stat-info">
+                                <h4>Salud Global</h4>
+                                <p className="stat-number">100%</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* 2. SECCIÓN DE LA LISTA / TABLA DE PLANTAS */}
+                    <section className="plants-section">
+                        <div className="section-header">
+                            <h2>Mis Plantas Registradas</h2>
+                            <p className="section-subtitle">Gestiona y monitorea el estado de tus plantas en tiempo real.</p>
+                        </div>
+
+                        {/* Aquí irá tu mapeo ( .map() ) de plantas desde PostgreSQL */}
+                        <div className="plants-table-container">
+                            {/* Ejemplo de estructura de tabla o tarjetas */}
+                            <p style={{ color: '#666' }}>[Aquí conectarás el componente para listar tus plantas desde la base de datos]</p>
+                        </div>
+                    </section>
+
+                </div>
+
             </main>
         </div>
     );

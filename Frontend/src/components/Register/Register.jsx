@@ -27,6 +27,7 @@ const Register = ({ onShowLogin }) => {
             await createUser(nombre, correo_electronico, password);
             
             setSuccess("Registro completado. Ahora puedes iniciar sesión.");
+            
             setNombre("");
             setCorreoElectronico("");
             setPassword("");
