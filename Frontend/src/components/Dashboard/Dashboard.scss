@@ -1,0 +1,67 @@
+@use "sass:color";
+
+$color-principal:#4caf50 ; 
+$color-secundario:#2e7d32 ; 
+$color-fondo: #f1f8e9; 
+$color-texto: #1b5e20; 
+$color-blanco: #ffffff;
+$color-rojo: #d32f2f;
+$sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0; 
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: $color-fondo;
+    width: 100%;
+}
+
+.dashboard-container {
+    width: 100%; 
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e0e0e0;
+        padding: 1rem;
+        
+        width: 100%;
+        background-color: $color-principal;
+
+        .dashboard-header-text {
+            margin: 0;
+
+            h1 {
+                color: $color-blanco;
+                margin: 0;
+            }
+            p {
+                margin: 0;
+                color: $color-blanco;
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    .logout-button {
+        background-color: $color-rojo;
+        color: $color-blanco;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: $sombra-suave;
+
+        &:hover {
+            background-color: color.scale($color-rojo, $lightness: -10%);
+        }
+    }
+}

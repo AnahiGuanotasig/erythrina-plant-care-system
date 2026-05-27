@@ -1,11 +1,12 @@
-// frontend/src/components/Dashboard/Dashboard.jsx
+import './Dashboard.scss';
+
 const Dashboard = ({ onLogout }) => {
     return (
-        <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', maxWidth: '1800px', margin: '0 auto' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #e0e0e0', paddingBottom: '1rem', marginBottom: '2rem' }}>
-                <div>
-                    <h1 style={{ color: '#2e7d32', margin: 0 }}>Erythrina</h1>
-                    <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Panel de Control de Plantas</p>
+        <div className="dashboard-container">
+            <header className="dashboard-header">
+                <div className="dashboard-header-text">
+                    <h1>Erythrina</h1>
+                    <p>Panel de Control de Plantas</p>
                 </div>
                 <button
                     onClick={onLogout}

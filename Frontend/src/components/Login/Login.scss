@@ -111,6 +111,18 @@ body {
                 font-weight: 500;
             }
 
+            .success-message {
+                background-color: color.scale($color-principal, $lightness: 86%);
+                color: $color-secundario;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid color.scale($color-principal, $lightness: 60%);
+                font-weight: 500;
+            }
+
             .form-group {
                 margin-bottom: 20px;
                 display: flex;
@@ -206,80 +218,6 @@ body {
 
     .login-image-side {
         min-height: 40vh;
-    }
-}
-
-// ==========================================
-// 2. ESTILOS DEL PANEL DE CONTROL (DASHBOARD)
-// ==========================================
-.dashboard-wrapper {
-    padding: 2rem;
-    max-width: 1800px;
-    margin: 0 auto;
-    box-sizing: border-box;
-
-    .dashboard-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #e0e0e0;
-        padding-bottom: 1rem;
-        margin-bottom: 2rem;
-
-        h1 {
-            color: $color-principal;
-            margin: 0;
-        }
-        p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-    }
-
-    .dashboard-content {
-        background-color: $color-blanco;
-        border: 1px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 2.5rem;
-        text-align: center;
-        box-shadow: $sombra-suave;
-
-        h2 {
-            color: #333;
-            margin-top: 0;
-        }
-        
-        .success-message {
-            color: #555;
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
-            line-height: 1.6;
-        }
-
-        .next-step-box {
-            border: 2px dashed #a5d6a7;
-            background-color: #e8f5e9;
-            padding: 2rem;
-            border-radius: 8px;
-            color: $color-texto;
-            font-weight: 500;
-        }
-    }
-
-    .btn-logout {
-        padding: 0.6rem 1.2rem;
-        background-color: $color-rojo;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s;
-
-        &:hover {
-            background-color: color.scale($color-rojo, $lightness: -15%);
-        }
     }
 }
 
