@@ -1,11 +1,11 @@
-// frontend/src/components/Login/Login.jsx
 import { useState } from 'react';
+import { Box, TextField, Button, Typography, Paper, Container, InputAdornment, IconButton } from '@mui/material';
+import { LuUser, LuLock, LuEye, LuEyeOff, LuLogIn } from 'react-icons/lu';
 import { login } from '../../services/auth.service';
-import './Login.scss';
+import { getUserCredentialByEmail } from '../../services/user.service';
 
-const Login = ({ onLoginSuccess, onShowRegister }) => {
-    const [correo_electronico, setCorreoElectronico] = useState('');
-    const [password, setPassword] = useState('');
+const Login = ({ onLoginSuccess }) => {
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -14,74 +14,114 @@ const Login = ({ onLoginSuccess, onShowRegister }) => {
         setError('');
         setLoading(true);
 
+        const form = e.target;
+        const credentials = {
+            correo_electronico: form.correo_electronico.value,
+            password: form.password.value
+        };
+
         try {
-            const response = await login(correo_electronico, password);
-            if (response.success) {
-                onLoginSuccess(response.data);
-            } else {
-                setError(response.message || 'Credenciales incorrectas');
+            const respuesta = await login(credentials.correo_electronico, credentials.password);
+            if (respuesta.success){
+                const dataUser = await getUserCredentialByEmail(credentials.correo_electronico);
+                if (dataUser && dataUser.id) {
+                    onLoginSuccess(dataUser.id); 
+                } else {
+                    setError('Credenciales incorrectas');
+                }
             }
-        } catch {
-            setError('Error al conectar con el servidor');
+        } catch (err) {
+            console.error(err);
+            setError('Error de conexión con el servidor');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="login-split-container">
-            {/* MITAD IZQUIERDA: CONTENEDOR DEL FORMULARIO */}
-            <div className="login-form-side">
-                <div className="login-card">
-                    <h2>¡Bienvenido!</h2>
-                    <p className="subtitle">Ingresa tus credenciales para acceder</p>
+        <Box sx={{ 
+            backgroundColor: '#f4f6f8', 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+        }}>
+            <Container maxWidth="xs">
+                <Paper elevation={4} sx={{ p: 4, borderRadius: '16px', textAlign: 'center' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2e7d32', mb: 1 }}>
+                        Erythrina
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', mb: 4 }}>
+                        Ingresa tus credenciales para gestionar tus plantas
+                    </Typography>
 
-                    {error && <div className="error-message">{error}</div>}
+                    {error && (
+                        <Typography variant="body2" sx={{ color: '#d32f2f', mb: 2, fontWeight: '500' }}>
+                            ⚠️ {error}
+                        </Typography>
+                    )}
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Correo Electrónico</label>
-                            <input
-                                type="email"
-                                value={correo_electronico}
-                                onChange={(e) => setCorreoElectronico(e.target.value)}
-                                required
-                                placeholder="correo@ejemplo.com"
-                            />
-                        </div>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                        <TextField
+                            name="correo_electronico"
+                            label="Correo Electrónico"
+                            type="email"
+                            variant="outlined"
+                            fullWidth
+                            required
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <LuUser size={20} color="#757575" />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
 
-                        <div className="form-group">
-                            <label>Contraseña</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                placeholder="••••••••"
-                            />
-                        </div>
+                        <TextField
+                            name="password"
+                            label="Contraseña"
+                            type={showPassword ? 'text' : 'password'}
+                            variant="outlined"
+                            fullWidth
+                            required
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <LuLock size={20} color="#757575" />
+                                    </InputAdornment>
+                                ),
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                            {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
 
-                        <button type="submit" className="btn-login" disabled={loading}>
-                            {loading ? 'Cargando...' : 'Iniciar Sesión'}
-                        </button>
-                        <div className="form-footer">
-                            <span>¿No tienes cuenta? </span>
-                            <button type="button" className="link-button" onClick={onShowRegister}>
-                                Registrarse
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            {/* MITAD DERECHA: CONTENEDOR DE LA IMAGEN */}
-            <div className="login-image-side">
-                <div className="image-overlay-text">
-                    <h1>Erythrina</h1>
-                    <p>Sistema de Gestión y Cuidado de Plantas</p>
-                </div>
-            </div>
-        </div>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="success"
+                            size="large"
+                            disabled={loading}
+                            startIcon={<LuLogIn />}
+                            sx={{ 
+                                py: 1.5, 
+                                borderRadius: '8px', 
+                                fontWeight: 'bold', 
+                                backgroundColor: '#2e7d32',
+                                '&:hover': { backgroundColor: '#1b5e20' }
+                            }}
+                        >
+                            {loading ? 'Verificando...' : 'Iniciar Sesión'}
+                        </Button>
+                    </Box>
+                </Paper>
+            </Container>
+        </Box>
     );
 };
 

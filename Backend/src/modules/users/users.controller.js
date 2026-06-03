@@ -1,10 +1,10 @@
 import * as UsersService from './users.service.js'
 import jsonwebtoken from 'jsonwebtoken';
 
-export const getUserByEmail = async (req,res) => {
+export const getUserCredencialByEmail = async (req,res) => {
     try{
-        const {correo_electronico} = req.params;
-        const user = await UsersService.getUserByEmail(correo_electronico);
+        const {correo_electronico} = req.body;
+        const user = await UsersService.getUserCredencialByEmail(correo_electronico);
         if(!user){
             return res.status(404).json({
                 success: false,
@@ -46,7 +46,7 @@ export const loginUser = async(req,res) =>{
         return res.status(200).json({
             success: true,
             data: user,
-            toke: token
+            token: token
         });
     } catch (error) {
         return res.status(400).json({

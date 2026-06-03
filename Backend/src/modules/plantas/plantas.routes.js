@@ -7,6 +7,7 @@ const router = Router();
 router.use(requireAuth);
 router.post('/',PlantasController.createPlanta);
 router.get('/',PlantasController.getAllPlantas);
+router.get('/user/:id', PlantasController.getPlantasByUser);
 router.get('/:id',PlantasController.getPlanta);
 router.put('/:id', PlantasController.updatePlanta);
 router.delete('/:id',PlantasController.deletePlanta);

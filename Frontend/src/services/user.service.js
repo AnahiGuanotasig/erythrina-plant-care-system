@@ -9,3 +9,13 @@ export const createUser = async(nombre_usuario, correo_electronico, password) =>
         throw error;
     }
 };
+
+export const getUserCredentialByEmail = async(correo_electronico) =>{
+    try{
+        const response = await API.post('users/credential', { correo_electronico });
+        return response.data.data;
+    }catch(error){
+        console.error('Error fetching user credentials:', error);
+        throw error;
+    }
+}

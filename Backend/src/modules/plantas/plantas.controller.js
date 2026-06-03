@@ -45,6 +45,22 @@ export const getPlanta = async (req, res) => {
         });
     };
 };
+
+export const getPlantasByUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const plantas = await PlantasService.getPlantasByUser(id);
+        return res.status(200).json({
+            success: true,
+            data: plantas
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
 export const updatePlanta = async(req,res) =>{
     try {
         const nuevaPlanta = await PlantasService.updatePlanta(req.params.id, req.body);

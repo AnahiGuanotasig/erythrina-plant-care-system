@@ -5,7 +5,6 @@ import * as UsersController from './users.controller.js';
 const router = Router();
 
 router.post('/',UsersController.createUser);
-router.get('/:correo_electronico',UsersController.getUserByEmail);
+router.post('/credential',UsersController.getUserCredencialByEmail);
 router.post('/login',UsersController.loginUser);
-
 export default router;

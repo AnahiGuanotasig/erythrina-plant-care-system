@@ -1,15 +1,6 @@
 import { core } from "zod";
 import { pool } from "../../config/database.js";
 
-export const getUserByEmail = async(correo_electronico)=>{
-    const query = `
-    SELECT id,correo_electronico,nombre_usuario
-    FROM usuarios
-    WHERE correo_electronico = $1
-    `
-    const resultado = await pool.query(query,[correo_electronico]);
-    return resultado.rows[0];
-}
 
 export const createUsuario = async ({
     correo_electronico,
@@ -34,7 +25,7 @@ export const createUsuario = async ({
     return resultado.rows[0];
 }
 
-export const getUserCrendencialByEmail = async(correo_electronico) =>{
+export const getUserCredencialByEmail = async(correo_electronico) =>{
     try {
         const query = `
         SELECT id,correo_electronico,nombre_usuario,password_hash

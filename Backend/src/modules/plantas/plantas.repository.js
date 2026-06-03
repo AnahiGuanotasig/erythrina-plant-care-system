@@ -46,6 +46,13 @@ export const getAllPlantas = async () => {
     return resultado.rows; // Retornamos el array completo de filas
 };
 
+export const getPlantasByUser = async (id_usuario) => {
+    const query = "SELECT * FROM plantas WHERE id_usuario = $1 ORDER BY id ASC";
+    const values = [id_usuario];
+    const resultado = await pool.query(query, values);
+    return resultado.rows; // Retornamos el array de plantas del usuario
+};
+
 export const getPlanta = async (id) => {
     const query = "SELECT * FROM plantas WHERE id = $1";
     const values = [id];

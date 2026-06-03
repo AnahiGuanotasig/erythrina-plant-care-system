@@ -27,6 +27,14 @@ export const getAllPlantas = async() =>{
     }
 };
 
+export const getPlantasByUser = async (id_usuario) => {
+    try {
+        return await PlantasRepository.getPlantasByUser(id_usuario);
+    } catch (error) {
+        throw new Error('Error al obtener plantas del usuario');
+    }
+};
+
 export const getPlanta = async(id) => {
     try {
         const planta = await PlantasRepository.getPlanta(id);

@@ -5,9 +5,9 @@ import * as UsersSchema from './users.schema.js'
 import * as UsersRepository from './users.repository.js'
 
 
-export const getUserByEmail = async(correo_electronico)=>{
+export const getUserCredencialByEmail = async(correo_electronico)=>{
     try {
-        const user = await UsersRepository.getUserByEmail(correo_electronico);
+        const user = await UsersRepository.getUserCredencialByEmail(correo_electronico);
         return user;
     } catch (error) {
         throw new Error("Error al obtener el usuario: " + error.message);
@@ -19,7 +19,7 @@ export const createUser = async(data)=>{
     try{
         const validateData = UsersSchema.usersSchema.parse(data);
         
-        const usuarioExistente = await getUserByEmail(validateData.correo_electronico);
+        const usuarioExistente = await getUserCredencialByEmail(validateData.correo_electronico);
         if(usuarioExistente){
             throw new Error("El correo electronico ya esta registrado");
         }
@@ -46,7 +46,7 @@ export const createUser = async(data)=>{
 export const loginUser = async(credenciales) =>{
     try {
         const validateData = UsersSchema.loginSchema.parse(credenciales);
-        const user = await UsersRepository.getUserCrendencialByEmail(validateData.correo_electronico);
+        const user = await UsersRepository.getUserCredencialByEmail(validateData.correo_electronico);
         if(!user){
             throw new Error("Correo electronico o contrasenia incorrectos");
         };
