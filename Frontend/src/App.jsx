@@ -6,7 +6,10 @@ import Dashboard from './components/Dashboard/Dashboard';
 import { logout } from './services/auth.service';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUserId = localStorage.getItem('userId');
+    return storedUserId ? Number(storedUserId) : null;
+  });
   const [view, setView] = useState('login');
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const token = localStorage.getItem('token');
@@ -16,12 +19,14 @@ function App() {
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
+    localStorage.setItem('userId', userData);
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
     logout();
     setUser(null);
+    localStorage.removeItem('userId');
     setIsAuthenticated(false);
   };
 
@@ -37,7 +42,7 @@ function App() {
     );
   }
 
-  return <Dashboard user = {user}onLogout={handleLogout} />;
+  return <Dashboard user={user} onLogout={handleLogout} />;
 }
 
 export default App;

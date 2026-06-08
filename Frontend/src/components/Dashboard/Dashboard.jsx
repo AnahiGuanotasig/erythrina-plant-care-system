@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import './Dashboard.scss';
 import { LuLayoutDashboard, LuPlus, LuHistory, LuSettings, LuDroplet, LuHeart } from "react-icons/lu";
 import { createPlanta, getPlantasByUser } from '../../services/plantas.service'; // Tu servicio de API
@@ -14,27 +14,107 @@ const Dashboard = ({ user, onLogout }) => {
     const [plantas, setPlantas] = useState([]);
     const [cargando, setCargando] = useState(true);
 
-    const obtenerPlantas = async () => {
+    const estadoCounts = useMemo(() => {
+        let saludables = 0;
+        let enObservacion = 0;
+        let enfermas = 0;
+
+        const normalize = (value) =>
+            `${value || ''}`
+                .normalize('NFD')
+                .replace(/\p{Diacritic}/gu, '')
+                .toLowerCase()
+                .trim();
+
+        plantas.forEach((planta) => {
+            const estado = normalize(planta.estado_actual).replace(/\s+/g, ' ');
+
+            if (estado === 'saludable') {
+                saludables++;
+            } else if (
+                estado.includes('advertencia') ||
+                estado.includes('en observacion') ||
+                estado.includes('observacion')
+            ) {
+                enObservacion++;
+            } else if (
+                estado.includes('necesita atencion') ||
+                estado.includes('enferma') ||
+                estado.includes('enfermo') ||
+                estado.includes('con estres') ||
+                estado.includes('estres')
+            ) {
+                enfermas++;
+            }
+        });
+
+        return {
+            saludables,
+            enObservacion,
+            enfermas,
+        };
+    }, [plantas]);
+
+    const obtenerPlantas = useCallback(async (userId) => {
         try {
             setCargando(true);
-            const userId = typeof user === 'object' && user?.id ? user.id : user;
             if (!userId) {
                 setPlantas([]);
                 setCargando(false);
                 return;
             }
             const data = await getPlantasByUser(userId);
-            setPlantas(Array.isArray(data) ? data : []);
+            const plantasArray = Array.isArray(data) ? data : [];
+            setPlantas(plantasArray);
             setCargando(false);
         } catch (error) {
             console.error("Error al obtener plantas de la BD:", error);
             setCargando(false);
         }
+    }, []);
+
+    const getEstadoChipProps = (estadoActual) => {
+        const estado = `${estadoActual || ''}`
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+            .toLowerCase()
+            .trim();
+
+        if (estado === 'saludable') {
+            return { label: 'Saludable', color: 'success' };
+        }
+
+        if (
+            estado.includes('advertencia') ||
+            estado.includes('en observacion') ||
+            estado.includes('observacion')
+        ) {
+            return { label: 'En Observación', color: 'warning' };
+        }
+
+        if (
+            estado.includes('necesita atencion') ||
+            estado.includes('enferma') ||
+            estado.includes('enfermo') ||
+            estado.includes('con estres') ||
+            estado.includes('estres')
+        ) {
+            return { label: 'Enferma / Con Estrés', color: 'error' };
+        }
+
+        return { label: estadoActual || 'Desconocido', color: 'default' };
     };
 
     useEffect(() => {
-        obtenerPlantas();
-    }, []);
+        const loadPlantas = async () => {
+            const userId = typeof user === 'object' && user?.id ? user.id : user;
+            await obtenerPlantas(userId);
+        };
+
+        if (user) {
+            loadPlantas();
+        }
+    }, [user, obtenerPlantas]);
 
     return (
         <div className="dashboard-container">
@@ -115,19 +195,27 @@ const Dashboard = ({ user, onLogout }) => {
                                     </div>
                                 </div>
 
-                                <div className="stat-card alert">
-                                    <LuDroplet size={24} className="stat-icon-svg" />
+                                <div className="stat-card" style={{ backgroundColor: '#c8e6c9' }}>
+                                    <LuHeart size={24} className="stat-icon-svg" style={{ color: '#2e7d32' }} />
                                     <div className="stat-info">
-                                        <h4>Por Regar</h4>
-                                        <p className="stat-number">3</p>
+                                        <h4>Saludables</h4>
+                                        <p className="stat-number" style={{ color: '#2e7d32' }}>{estadoCounts.saludables}</p>
                                     </div>
                                 </div>
 
-                                <div className="stat-card">
-                                    <LuHeart size={24} className="stat-icon-svg" />
+                                <div className="stat-card" style={{ backgroundColor: '#fff3e0' }}>
+                                    <LuDroplet size={24} className="stat-icon-svg" style={{ color: '#f57c00' }} />
                                     <div className="stat-info">
-                                        <h4>Salud Global</h4>
-                                        <p className="stat-number">100%</p>
+                                        <h4>En Observación</h4>
+                                        <p className="stat-number" style={{ color: '#f57c00' }}>{estadoCounts.enObservacion}</p>
+                                    </div>
+                                </div>
+
+                                <div className="stat-card" style={{ backgroundColor: '#ffebee' }}>
+                                    <LuHeart size={24} className="stat-icon-svg" style={{ color: '#d32f2f' }} />
+                                    <div className="stat-info">
+                                        <h4>Enfermas/Con Estrés</h4>
+                                        <p className="stat-number" style={{ color: '#d32f2f' }}>{estadoCounts.enfermas}</p>
                                     </div>
                                 </div>
                             </section>
@@ -145,11 +233,13 @@ const Dashboard = ({ user, onLogout }) => {
                                     <Table>
                                         <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                                             <TableRow>
-                                                <TableCell sx={{ fontWeight: 'bold' }}>Planta</TableCell>
-                                                <TableCell sx={{ fontWeight: 'bold' }}>Especie</TableCell>
-                                                <TableCell sx={{ fontWeight: 'bold' }}>Ubicación</TableCell>
+                                                        <TableCell sx={{ fontWeight: 'bold' }}>Planta</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Tipo</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Tamaño</TableCell>
                                                 <TableCell sx={{ fontWeight: 'bold' }}>Frecuencia</TableCell>
                                                 <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Fecha de Plantación</TableCell>
+
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -169,16 +259,18 @@ const Dashboard = ({ user, onLogout }) => {
                                                 plantas.map((planta) => (
                                                     <TableRow key={planta.id} hover>
                                                         <TableCell sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
-                                                            🌿 {planta.nombre}
+                                                            🌿 {planta.nombre_planta}
                                                         </TableCell>
-                                                        <TableCell>{planta.especie || 'No especificada'}</TableCell>
+                                                        <TableCell>{planta.tipo_planta || 'N/D'}</TableCell>
+                                                        <TableCell>{planta.tamanio_planta || 'N/D'}</TableCell>
+                                                        <TableCell>Cada {planta.intervalo_riego_dias ?? 'N/D'} días</TableCell>
                                                         <TableCell>
-                                                            <Chip label={planta.ubicacion} color="primary" variant="outlined" size="small" />
+                                                            {(() => {
+                                                                const chipProps = getEstadoChipProps(planta.estado_actual);
+                                                                return <Chip label={chipProps.label} color={chipProps.color} size="small" />;
+                                                            })()}
                                                         </TableCell>
-                                                        <TableCell>Cada {planta.frecuencia_riego} días</TableCell>
-                                                        <TableCell>
-                                                            <Chip label="Saludable" color="success" size="small" />
-                                                        </TableCell>
+                                                        <TableCell>{new Date(planta.fecha_plantacion).toLocaleDateString()}</TableCell>
                                                     </TableRow>
                                                 ))
                                             )}
@@ -206,10 +298,13 @@ const Dashboard = ({ user, onLogout }) => {
 
                                     const userId = typeof user === 'object' && user?.id ? user.id : user;
                                     const data = {
+                                        codigo: formElement.codigo?.value || `PL-${Date.now()}`,
                                         nombre: formElement.nombre.value,
-                                        especie: formElement.especie.value,
-                                        frecuencia_riego: parseInt(formElement.frecuencia_riego.value, 10),
-                                        ubicacion: formElement.ubicacion.value,
+                                        id_tipo: parseInt(formElement.id_tipo?.value || '1', 10),
+                                        id_tamanio: parseInt(formElement.id_tamanio?.value || '1', 10),
+                                        id_estado: parseInt(formElement.id_estado?.value || '1', 10),
+                                        fecha_plantacion: new Date().toISOString().split('T')[0],
+                                        intervalo_riego_dias: parseInt(formElement.frecuencia_riego.value, 10),
                                         id_usuario: userId
                                     };
 
@@ -217,7 +312,8 @@ const Dashboard = ({ user, onLogout }) => {
                                         const nuevaPlanta = await createPlanta(data);
                                         if (nuevaPlanta) {
                                             alert("¡Planta guardada con éxito en PostgreSQL!");
-                                            obtenerPlantas(); // Forzar actualización de la tabla
+                                            const userId = typeof user === 'object' && user?.id ? user.id : user;
+                                            await obtenerPlantas(userId); // Forzar actualización de la tabla
                                             setCurrentView('resumen'); // Redirigir automáticamente
                                         }
                                     } catch (error) {
@@ -228,15 +324,31 @@ const Dashboard = ({ user, onLogout }) => {
                             >
                                 <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 3, mb: 4 }}>
                                     <TextField name="nombre" label="Nombre Común" variant="outlined" fullWidth required />
-                                    <TextField name="especie" label="Especie / Nombre Científico" variant="outlined" fullWidth />
+                                    <TextField name="codigo" label="Código (opcional)" variant="outlined" fullWidth />
                                     <TextField name="frecuencia_riego" label="Frecuencia de Riego (Días)" type="number" variant="outlined" fullWidth required />
 
                                     <FormControl fullWidth>
-                                        <InputLabel id="ubicacion-label">Ubicación</InputLabel>
-                                        <Select name="ubicacion" labelId="ubicacion-label" defaultValue="Interior" label="Ubicación">
-                                            <MenuItem value="Interior">Interior</MenuItem>
-                                            <MenuItem value="Exterior">Exterior</MenuItem>
-                                            <MenuItem value="Balcón">Balcón</MenuItem>
+                                        <InputLabel id="id_tipo-label">Tipo de Planta</InputLabel>
+                                        <Select name="id_tipo" labelId="id_tipo-label" defaultValue="1" label="Tipo de Planta">
+                                            <MenuItem value="1">Tipo 1</MenuItem>
+                                            <MenuItem value="2">Tipo 2</MenuItem>
+                                            <MenuItem value="3">Tipo 3</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="id_tamanio-label">Tamaño</InputLabel>
+                                        <Select name="id_tamanio" labelId="id_tamanio-label" defaultValue="1" label="Tamaño">
+                                            <MenuItem value="1">Pequeño</MenuItem>
+                                            <MenuItem value="2">Mediano</MenuItem>
+                                            <MenuItem value="3">Grande</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="id_estado-label">Estado</InputLabel>
+                                        <Select name="id_estado" labelId="id_estado-label" defaultValue="1" label="Estado">
+                                            <MenuItem value="1">Saludable</MenuItem>
+                                            <MenuItem value="2">Advertencia</MenuItem>
+                                            <MenuItem value="3">Necesita atención</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>
