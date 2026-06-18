@@ -106,3 +106,9 @@ export const deletePlanta = async (id) => {
     const resultado = await pool.query(query, values);
     return resultado.rows[0];
 };
+
+export const getPlantasTipos = async() =>{
+    const query = "SELECT * FROM plantas_tipos ORDER BY id ASC";
+    const resultado = await pool.query(query);
+    return resultado.rows; 
+}   

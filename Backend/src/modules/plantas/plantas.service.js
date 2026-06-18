@@ -72,3 +72,11 @@ export const deletePlanta = async(id) =>{
         throw new Error ("Error al eliminar la planta")
     };
 };
+
+export const getPlantasTipos = async() =>{
+    try {
+        return await PlantasRepository.getPlantasTipos();
+    } catch (error) {
+        throw new Error ("Error al obtener los tipos de plantas")
+    };
+}

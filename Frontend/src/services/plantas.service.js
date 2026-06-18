@@ -19,3 +19,9 @@ export const getPlantasByUser = async (id_usuario) => {
     const response = await API.get(`/plantas/user/${id_usuario}`);
     return response.data.data;
 };
+
+
+export const plantasTipos = async() =>{
+    const response = await API.get('/plantas/tipos');
+    return response.data.data;
+}

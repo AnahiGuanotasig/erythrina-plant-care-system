@@ -32,7 +32,7 @@ export const getAllPlantas = async (req,res)=>{
 
 export const getPlanta = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id} = req.params;
         const planta = await PlantasService.getPlanta(id);
         return res.status(200).json({
             success:true,
@@ -98,6 +98,21 @@ export const deletePlanta = async(req,res) =>{
         return res.status(200).json({
             success: true,
             data: plantaBorrada
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success:false,
+            message: error.message
+        });  
+    };
+};
+
+export const getPlantasTipos = async(req,res) =>{
+    try {
+        const tipos = await PlantasService.getPlantasTipos();
+        return res.status(200).json({
+            success:true,
+            data: tipos
         });
     } catch (error) {
         return res.status(400).json({

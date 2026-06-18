@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import './Dashboard.scss';
 import { LuLayoutDashboard, LuPlus, LuHistory, LuSettings, LuDroplet, LuHeart } from "react-icons/lu";
-import { createPlanta, getPlantasByUser } from '../../services/plantas.service'; // Tu servicio de API
+import { getPlantasByUser } from '../../services/plantas.service';
+import AddPlant from '../AddPlant/AddPlant';
 
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    TextField, Button, FormControl, InputLabel, Select, MenuItem, Box, Typography, Chip
+    Box, Typography, Chip
 } from '@mui/material';
 
 const Dashboard = ({ user, onLogout }) => {
@@ -282,88 +283,11 @@ const Dashboard = ({ user, onLogout }) => {
                     )}
 
                     {currentView === 'agregar' && (
-                        <Box sx={{ p: 1 }}>
-                            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1, color: '#2e7d32' }}>
-                                Agregar Nueva Planta 🌱
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 4 }}>
-                                Introduce los datos de la planta para guardarla en PostgreSQL.
-                            </Typography>
-
-                            <Box
-                                component="form"
-                                onSubmit={async (e) => {
-                                    e.preventDefault();
-                                    const formElement = e.target;
-
-                                    const userId = typeof user === 'object' && user?.id ? user.id : user;
-                                    const data = {
-                                        codigo: formElement.codigo?.value || `PL-${Date.now()}`,
-                                        nombre: formElement.nombre.value,
-                                        id_tipo: parseInt(formElement.id_tipo?.value || '1', 10),
-                                        id_tamanio: parseInt(formElement.id_tamanio?.value || '1', 10),
-                                        id_estado: parseInt(formElement.id_estado?.value || '1', 10),
-                                        fecha_plantacion: new Date().toISOString().split('T')[0],
-                                        intervalo_riego_dias: parseInt(formElement.frecuencia_riego.value, 10),
-                                        id_usuario: userId
-                                    };
-
-                                    try {
-                                        const nuevaPlanta = await createPlanta(data);
-                                        if (nuevaPlanta) {
-                                            alert("¡Planta guardada con éxito en PostgreSQL!");
-                                            const userId = typeof user === 'object' && user?.id ? user.id : user;
-                                            await obtenerPlantas(userId); // Forzar actualización de la tabla
-                                            setCurrentView('resumen'); // Redirigir automáticamente
-                                        }
-                                    } catch (error) {
-                                        console.error("Error al guardar planta:", error);
-                                        alert("Error al intentar comunicarse con el servidor.");
-                                    }
-                                }}
-                            >
-                                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 3, mb: 4 }}>
-                                    <TextField name="nombre" label="Nombre Común" variant="outlined" fullWidth required />
-                                    <TextField name="codigo" label="Código (opcional)" variant="outlined" fullWidth />
-                                    <TextField name="frecuencia_riego" label="Frecuencia de Riego (Días)" type="number" variant="outlined" fullWidth required />
-
-                                    <FormControl fullWidth>
-                                        <InputLabel id="id_tipo-label">Tipo de Planta</InputLabel>
-                                        <Select name="id_tipo" labelId="id_tipo-label" defaultValue="1" label="Tipo de Planta">
-                                            <MenuItem value="1">Tipo 1</MenuItem>
-                                            <MenuItem value="2">Tipo 2</MenuItem>
-                                            <MenuItem value="3">Tipo 3</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="id_tamanio-label">Tamaño</InputLabel>
-                                        <Select name="id_tamanio" labelId="id_tamanio-label" defaultValue="1" label="Tamaño">
-                                            <MenuItem value="1">Pequeño</MenuItem>
-                                            <MenuItem value="2">Mediano</MenuItem>
-                                            <MenuItem value="3">Grande</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="id_estado-label">Estado</InputLabel>
-                                        <Select name="id_estado" labelId="id_estado-label" defaultValue="1" label="Estado">
-                                            <MenuItem value="1">Saludable</MenuItem>
-                                            <MenuItem value="2">Advertencia</MenuItem>
-                                            <MenuItem value="3">Necesita atención</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="success"
-                                    startIcon={<LuPlus />}
-                                    sx={{ fontWeight: 'bold', px: 4, py: 1.2, borderRadius: '8px', backgroundColor: '#2e7d32' }}
-                                >
-                                    Guardar Planta
-                                </Button>
-                            </Box>
-                        </Box>
+                        <AddPlant user={user} onPlantAdded={async () => {
+                            const userId = typeof user === 'object' && user?.id ? user.id : user;
+                            await obtenerPlantas(userId);
+                            setCurrentView('resumen');
+                        }} />
                     )}
 
                     {currentView === 'historial' && (
